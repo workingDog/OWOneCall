@@ -26,18 +26,24 @@ Options available:
 
 -   see [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) for all the options available.
 
-Convenience options to retrieve current and forecast weather data, are: 
+Create an options object such as:
+
+    let myOptions = OWOptions(excludeMode: [.daily, .hourly, .minutely], units: .metric, lang: "en")
+
+to retrive the current weather data.
+
+Additional convenience options to retrieve current and forecast weather data: 
 
 -    OWOptions.current(lang: String = "en")
 -    OWOptions.dailyForecast(lang: String = "en")  
 -    OWOptions.hourlyForecast(lang: String = "en")
 
-Convenience options to retrieve past historical weather data, are: 
+Additional convenience options to retrieve past historical weather data: 
 
 -    OWHistOptions.yesterday(lang: String = "en")
 -    OWHistOptions.daysAgo(day: Double, lang: String = "en")
 
-Use of the **lang** options parameter to chose the language of the results, default "en".
+Use the **lang** options parameter to chose the language of the results, default "en".
 
 
 ### Installation
