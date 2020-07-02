@@ -12,7 +12,7 @@ import SwiftUI
 /**
  * provide access to the OpenWeather One Call data using a single function call
  */
-public class OWProvider {
+open class OWProvider {
     
     private let client: OWClient
     public var cancellable: AnyCancellable?
@@ -22,7 +22,7 @@ public class OWProvider {
     }
     
     // get the weather at the given location with the given options, results pass back through the weather binding
-    public func getWeather(lat: Double, lon: Double, weather: Binding<OWResponse>, options: OWOptionsProtocol) {
+    open func getWeather(lat: Double, lon: Double, weather: Binding<OWResponse>, options: OWOptionsProtocol) {
         cancellable = getOWResponse(lat: lat, lon: lon, options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -39,7 +39,7 @@ public class OWProvider {
     }
     
     // get the weather at the given location with the given options, with the old style callback
-    public func getWeather(lat: Double, lon: Double, options: OWOptionsProtocol, completion: @escaping (OWResponse?) -> Void) {
+    open func getWeather(lat: Double, lon: Double, options: OWOptionsProtocol, completion: @escaping (OWResponse?) -> Void) {
         cancellable = getOWResponse(lat: lat, lon: lon, options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
