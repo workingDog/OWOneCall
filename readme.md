@@ -18,7 +18,7 @@ Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-
     
     weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
 
-See *ContentView* for an example use.
+See [*OWOneCallExample*](https://github.com/workingDog/OWOneCallExample) for an example use.
 
 ### Options
 
