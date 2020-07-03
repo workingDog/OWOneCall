@@ -43,19 +43,13 @@ public struct OWResponse: Codable {
 // MARK: - Current
 public struct Current: Codable {
     
-    public let dt: Int
-    public let sunrise, sunset: Int
-    public let temp, feelsLike: Double
-    public let pressure, humidity: Int
-    public let dewPoint, uvi: Double
-    public let clouds, visibility: Int
-    public let windSpeed: Double
-    public let windDeg: Int
+    public let dt, sunrise, sunset, pressure, humidity, clouds, visibility, windDeg: Int
+    public let temp, feelsLike, dewPoint, uvi, windSpeed: Double
+    public let windGust: Double?
     public let weather: [Weather]
     public let rain: Rain?
     public let snow: Snow?
-    public let windGust: Double?
-    
+
     enum CodingKeys: String, CodingKey {
         case dt, sunrise, sunset, temp, pressure, humidity, uvi, clouds, visibility, weather, rain, snow
         case feelsLike = "feels_like"
@@ -114,6 +108,7 @@ public struct Current: Codable {
 
 // MARK: - Rain
 public struct Rain: Codable {
+    
     public let the1H: Double?
     
     enum CodingKeys: String, CodingKey {
@@ -138,6 +133,7 @@ public struct Rain: Codable {
 
 // MARK: - Snow
 public struct Snow: Codable {
+    
     public let the1H: Double?
     
     enum CodingKeys: String, CodingKey {
@@ -203,19 +199,12 @@ public struct Weather: Codable {
 // MARK: - Daily
 public struct Daily: Codable, Hashable  {
     
-    public let dt: Int
-    public let sunrise, sunset: Int
+    public let dt, sunrise, sunset, pressure, humidity, windDeg, clouds: Int
+    public let dewPoint, windSpeed: Double
+    public let windGust, rain, snow, uvi: Double?
     public let temp: DailyTemp
     public let feelsLike: FeelsLike
-    public let pressure, humidity: Int
-    public let dewPoint, windSpeed: Double
-    public let windDeg: Int
-    public let windGust: Double?
     public let weather: [Weather]
-    public let clouds: Int
-    public let rain: Double?
-    public let snow: Double?
-    public let uvi: Double
     
     enum CodingKeys: String, CodingKey {
         case dt, sunrise, sunset, temp, pressure, humidity, weather, clouds, uvi, snow, rain
@@ -261,6 +250,7 @@ public struct Daily: Codable, Hashable  {
 
 // MARK: - FeelsLike
 public struct FeelsLike: Codable {
+    
     public let day, night, eve, morn: Double
     
     public init() {
@@ -274,8 +264,7 @@ public struct FeelsLike: Codable {
 // MARK: - DailyTemp
 public struct DailyTemp: Codable {
     
-    public let day, min, max, night: Double
-    public let eve, morn: Double
+    public let day, min, max, night, eve, morn: Double
     
     public init() {
         self.day = 0.0
@@ -290,19 +279,14 @@ public struct DailyTemp: Codable {
 // MARK: - Hourly
 public struct Hourly: Codable {
     
-    public let dt: Int
-    public let temp, feelsLike: Double
-    public let pressure, humidity: Int
-    public let dewPoint: Double
-    public let clouds: Int
-    public let windSpeed: Double
-    public let windDeg: Int
+    public let dt, pressure, humidity, clouds, windDeg: Int
+    public let temp, feelsLike, dewPoint, windSpeed: Double
     public let windGust: Double?
     public let weather: [Weather]
     public let rain: Rain?
     
     enum CodingKeys: String, CodingKey {
-        case dt, temp,pressure, humidity, clouds, weather, rain
+        case dt, temp, pressure, humidity, clouds, weather, rain
         case feelsLike = "feels_like"
         case dewPoint = "dew_point"
         case windSpeed = "wind_speed"
@@ -333,11 +317,17 @@ public struct Hourly: Codable {
 
 // MARK: - Minutely
 public struct Minutely: Codable {
+    
     public let dt: Int
     public let precipitation: Double
     
     public init() {
         self.dt = 0
         self.precipitation = 0.0
+    }
+    
+    // convenience function
+    public func getDate() -> Date {
+        return self.dt.dateFromUTC()
     }
 }

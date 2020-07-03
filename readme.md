@@ -26,11 +26,9 @@ Options available:
 
 -   see [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) for all the options available.
 
-Create an options object such as:
+Create an options object such as this, to retrieve the current weather data:
 
     let myOptions = OWOptions(excludeMode: [.daily, .hourly, .minutely], units: .metric, lang: "en")
-
-to retrive the current weather data.
 
 Additional convenience options to retrieve current and forecast weather data: 
 

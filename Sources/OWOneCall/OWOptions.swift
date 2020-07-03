@@ -8,6 +8,9 @@
 import Foundation
 
 
+/*
+ * parameters to exclude some parts of the weather data from the API response
+ */
 public enum ExcludeMode: String {
     case current
     case minutely
@@ -15,6 +18,9 @@ public enum ExcludeMode: String {
     case daily
 }
 
+/*
+ * parameters for units, Standard (Kelvin), metric (Celsius), or imperial (Fahrenheit) units
+ */
 public enum Units: String {
     case metric
     case imperial
@@ -25,6 +31,9 @@ public protocol OWOptionsProtocol {
     func toParamString() -> String
 }
 
+/*
+ * Options to use for retrieving historical weather data
+ */
 public class OWHistOptions: OWOptionsProtocol {
     
     private var dt: Int
@@ -59,6 +68,9 @@ public class OWHistOptions: OWOptionsProtocol {
     }
 }
 
+/*
+ * Options to use for retrieving current and forecast weather data
+ */
 public class OWOptions: OWOptionsProtocol {
     
     private var excludeMode: [ExcludeMode]?
