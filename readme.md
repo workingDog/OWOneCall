@@ -77,3 +77,6 @@ Requires a valid OpenWeather key, see:
 
 -    [OpenWeather how to start](https://openweathermap.org/appid)
 
+### License
+
+MIT
