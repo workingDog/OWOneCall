@@ -11,12 +11,14 @@ Provides for current, forecast and historical weather data through a single func
 
 ### Usage
 
-Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) is access through the use of a **OWProvider**, with a single function **getWeather**, eg:
+Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) is accessed through the use of a **OWProvider**, with a single function **getWeather**, eg:
 
     let weatherProvider = OWProvider(apiKey: "your key")
     @State var weather = OWResponse()
-    
+    ...
     weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
+    ...
+    Text(weather.current?.weatherInfo() ?? "")
 
 See [*OWOneCallExample*](https://github.com/workingDog/OWOneCallExample) for an example use.
 
