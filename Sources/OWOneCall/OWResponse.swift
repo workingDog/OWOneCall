@@ -177,7 +177,7 @@ public struct Weather: Codable {
     public var iconNameFromId: String {
         switch id {
         case 200...232:  // thunderstorm
-            return "could.bolt.rain"
+            return "cloud.bolt.rain"
         case 300...301: // drizzle
             return "cloud.drizzle"
         case 500...531: // rain
