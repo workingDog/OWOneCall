@@ -117,9 +117,7 @@ public class OWClient {
                 if (500..<600 ~= httpResponse.statusCode) {
                     throw APIError.apiError(reason: "server error")
                 }
-                
-                //  self.showPretty(data)
-                
+
                 return try? JSONDecoder().decode(T.self, from: data)
             }
             .mapError { error in
@@ -137,18 +135,5 @@ public class OWClient {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    
-    // for testing
-    private func showPretty(_ data: Data) {
-        
- //       let testDecode = try? JSONDecoder().decode(OWResponse.self, from: data)
- //       print("\n----> testDecode: \(testDecode as Optional)")
-        
-        if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) {
-            print("\n--->response json: " + String(decoding: jsonData, as: UTF8.self))
-        } else {
-            print("=========> json data malformed")
-        }
-    }
-    
+ 
 }
