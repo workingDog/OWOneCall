@@ -19,6 +19,13 @@ Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-
     weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
     ...
     Text(weather.current?.weatherInfo() ?? "")
+    
+    // or using the old style callback
+    weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.current()) { response in
+            if let theWeather = response {
+               self.weather = theWeather
+            }
+    }
 
 See [*OWOneCallExample*](https://github.com/workingDog/OWOneCallExample) for an example use.
 
