@@ -4,7 +4,6 @@
 //
 //  Created by Ringo Wathelet on 2020/06/30.
 //
-
 import Foundation
 
 
@@ -106,19 +105,20 @@ public struct Current: Codable {
     
 }
 
-// MARK: - Rain
 public struct Rain: Codable {
-    
     public let the1H: Double?
+    public let the3H: Double?
     
     enum CodingKeys: String, CodingKey {
         case the1H = "1h"
+        case the3H = "3h"
     }
     
     public init() {
         self.the1H = 0.0
+        self.the3H = 0.0
     }
-    
+
     // for the case where we have:  "rain": { }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -127,35 +127,44 @@ public struct Rain: Codable {
         } else {
             self.the1H = nil
         }
+        if let theRain = try? values.decode(Rain.self, forKey: .the3H) {
+            self.the3H = theRain.the3H
+        } else {
+            self.the3H = nil
+        }
     }
     
 }
 
-// MARK: - Snow
 public struct Snow: Codable {
-    
     public let the1H: Double?
+    public let the3H: Double?
     
     enum CodingKeys: String, CodingKey {
         case the1H = "1h"
+        case the3H = "3h"
     }
-    
+
     public init() {
-        self.the1H = nil
+        self.the1H = 0.0
+        self.the3H = 0.0
     }
     
     // for the case where we have:  "snow": { }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        if let theRain = try? values.decode(Snow.self, forKey: .the1H) {
-            self.the1H = theRain.the1H
+        if let theSnow = try? values.decode(Snow.self, forKey: .the1H) {
+            self.the1H = theSnow.the1H
         } else {
-            self.the1H = 0.0
+            self.the1H = nil
+        }
+        if let theSnow = try? values.decode(Snow.self, forKey: .the3H) {
+            self.the3H = theSnow.the3H
+        } else {
+            self.the3H = nil
         }
     }
 }
-
-// todo more Rain and snow --> 3h
 
 // MARK: - Weather
 public struct Weather: Codable {

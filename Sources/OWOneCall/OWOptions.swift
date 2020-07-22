@@ -45,7 +45,7 @@ public class OWHistOptions: OWOptionsProtocol {
     }
     
     public init(date: Date, lang: String = "en") {
-        self.dt = date.millisecondsSince1970
+        self.dt = date.utc
         self.lang = lang
     }
     

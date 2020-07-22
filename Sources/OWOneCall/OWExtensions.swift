@@ -17,7 +17,7 @@ public extension Int {
 
 public extension Date {
     
-    var millisecondsSince1970: Int {
+    var utc: Int {
         return Int(self.timeIntervalSince1970)
     }
 

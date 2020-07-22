@@ -21,26 +21,18 @@ open class OWProvider {
         self.client = OWClient(apiKey: apiKey)
     }
     
-    // get the weather at the given location with the given options, results pass back through the weather binding
+    /// get the weather at the given location with the given options, results pass back through the weather binding
     open func getWeather(lat: Double, lon: Double, weather: Binding<OWResponse>, options: OWOptionsProtocol) {
-        cancellable = getOWResponse(lat: lat, lon: lon, options: options)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }, receiveValue: { resp in
-                if let theWeather = resp {
-                    weather.wrappedValue = theWeather
-                }
-            })
+        getWeather(lat: lat, lon: lon, options: options) { resp in
+            if let theWeather = resp {
+                weather.wrappedValue = theWeather
+            }
+        }
     }
     
-    // get the weather at the given location with the given options, with the old style callback
+    /// get the weather at the given location with the given options, with callback
     open func getWeather(lat: Double, lon: Double, options: OWOptionsProtocol, completion: @escaping (OWResponse?) -> Void) {
-        cancellable = getOWResponse(lat: lat, lon: lon, options: options)
+        cancellable = client.fetchThis(param: "lat=\(lat)&lon=\(lon)", options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -52,10 +44,6 @@ open class OWProvider {
             }, receiveValue: { resp in
                 return completion(resp)
             })
-    }
-    
-    private func getOWResponse(lat: Double, lon: Double, options: OWOptionsProtocol) -> AnyPublisher<OWResponse?, APIError> {
-        return client.fetchThis(param: "lat=\(lat)&lon=\(lon)", options: options)
     }
     
 }

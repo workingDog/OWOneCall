@@ -78,24 +78,6 @@ public class OWClient {
         return self.doDataTaskPublish(request: request)
     }
     
-    /*
-     * fetch the raw data from the server. A GET request with the chosen parameters is sent to the server.
-     *
-     * @param parameters
-     * @return a AnyPublisher<Data?, APIError>
-     */
-    public func fetchRaw(param: String, options: OWOptionsProtocol) -> AnyPublisher<Data?, APIError> {
-        guard let url = baseUrl(param, options: options) else {
-            return Just<Data?>(nil).setFailureType(to: APIError.self).eraseToAnyPublisher()
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue(mediaType, forHTTPHeaderField: "Accept")
-        request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
-        
-        return self.doDataTaskPublish(request: request)
-    }
-    
     private func doDataTaskPublish<T: Decodable>(request: URLRequest) -> AnyPublisher<T?, APIError> {
         return self.sessionManager.dataTaskPublisher(for: request)
             .tryMap { data, response in
