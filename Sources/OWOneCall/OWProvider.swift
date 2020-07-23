@@ -15,7 +15,7 @@ import SwiftUI
 open class OWProvider {
     
     private let client: OWClient
-    public var cancellable: AnyCancellable?
+    public var cancellables = Set<AnyCancellable>()
     
     public init(apiKey: String) {
         self.client = OWClient(apiKey: apiKey)
@@ -32,7 +32,7 @@ open class OWProvider {
     
     /// get the weather at the given location with the given options, with callback
     open func getWeather(lat: Double, lon: Double, options: OWOptionsProtocol, completion: @escaping (OWResponse?) -> Void) {
-        cancellable = client.fetchThis(param: "lat=\(lat)&lon=\(lon)", options: options)
+        client.fetchThis(param: "lat=\(lat)&lon=\(lon)", options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -43,7 +43,12 @@ open class OWProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
+    }
+    
+    open func clearCancellables() {
+        self.cancellables.forEach{ $0.cancel() }
+        self.cancellables = Set<AnyCancellable>()
     }
     
 }
