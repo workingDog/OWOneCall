@@ -27,7 +27,12 @@ Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-
             }
     }
 
-See [*OWOneCallExample*](https://github.com/workingDog/OWOneCallExample) for an example use.
+See the following for example uses:
+
+-   [*OWOneCallExample*](https://github.com/workingDog/OWOneCallExample) 
+
+-   [SwiftUI Weather App](https://github.com/workingDog/YAWA)
+
 
 ### Options
 
