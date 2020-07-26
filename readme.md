@@ -62,7 +62,7 @@ Include the files in the **./Sources/OWOneCall** folder into your project or pre
 Create a Package.swift file for your project and add a dependency to:
 
     dependencies: [
-      .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.1.3")
+      .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.2.0")
     ]
 
 #### Using Xcode
