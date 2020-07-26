@@ -80,7 +80,7 @@ public struct Current: Codable {
     
     // convenience function
     public func getDate() -> Date {
-        return self.dt.dateFromUTC()
+        return Date(timeIntervalSince1970: TimeInterval(self.dt))
     }
     
     // convenience function
@@ -92,13 +92,6 @@ public struct Current: Codable {
     }
 
     // convenience function
-    public func formattedDate(format: String, lang: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: lang)
-        dateFormatter.dateFormat = format
-        return dateFormatter.string(from: self.dt.dateFromUTC())
-    }
-    
     public func weatherIconName() -> String {
         return self.weather.first != nil ? self.weather.first!.iconNameFromId : "smiley"
     }
@@ -245,7 +238,12 @@ public struct Daily: Codable, Hashable  {
     
     // convenience function
     public func getDate() -> Date {
-        return self.dt.dateFromUTC()
+        return Date(timeIntervalSince1970: TimeInterval(self.dt))
+    }
+    
+    // convenience function
+    public func weatherIconName() -> String {
+        return self.weather.first != nil ? self.weather.first!.iconNameFromId : "smiley"
     }
     
     public static func == (lhs: Daily, rhs: Daily) -> Bool {
@@ -320,8 +318,14 @@ public struct Hourly: Codable {
     
     // convenience function
     public func getDate() -> Date {
-        return self.dt.dateFromUTC()
+        return Date(timeIntervalSince1970: TimeInterval(self.dt))
     }
+    
+    // convenience function
+    public func weatherIconName() -> String {
+        return self.weather.first != nil ? self.weather.first!.iconNameFromId : "smiley"
+    }
+    
 }
 
 // MARK: - Minutely
@@ -337,6 +341,6 @@ public struct Minutely: Codable {
     
     // convenience function
     public func getDate() -> Date {
-        return self.dt.dateFromUTC()
+        return Date(timeIntervalSince1970: TimeInterval(self.dt))
     }
 }

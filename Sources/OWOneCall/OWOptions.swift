@@ -43,9 +43,9 @@ public class OWHistOptions: OWOptionsProtocol {
         self.dt = dt
         self.lang = lang
     }
-    
+
     public init(date: Date, lang: String = "en") {
-        self.dt = date.utc
+        self.dt = Int(date.timeIntervalSince1970)
         self.lang = lang
     }
     
