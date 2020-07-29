@@ -207,7 +207,8 @@ public struct Daily: Codable, Hashable  {
     public let temp: DailyTemp
     public let feelsLike: FeelsLike
     public let weather: [Weather]
-    public let pop, visibility: Int?
+    public let pop: Double?
+    public let visibility: Int?
     
     enum CodingKeys: String, CodingKey {
         case dt, sunrise, sunset, temp, pressure, humidity, visibility, weather, clouds, uvi, snow, rain, pop
@@ -236,7 +237,7 @@ public struct Daily: Codable, Hashable  {
         self.rain = 0.0
         self.snow = 0.0
         self.visibility = 0
-        self.pop = 0
+        self.pop = 0.0
     }
     
     // convenience function
@@ -295,7 +296,8 @@ public struct Hourly: Codable {
     public let weather: [Weather]
     public let rain: Rain?
     public let snow: Snow?
-    public let pop, visibility: Int?
+    public let pop: Double?
+    public let visibility: Int?
     
     enum CodingKeys: String, CodingKey {
         case dt, temp, pressure, humidity, visibility, clouds, weather, rain, snow, pop
@@ -320,7 +322,7 @@ public struct Hourly: Codable {
         self.weather = []
         self.rain = Rain()
         self.snow = Snow()
-        self.pop = 0
+        self.pop = 0.0
         self.visibility = 0
     }
     
