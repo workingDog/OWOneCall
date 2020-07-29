@@ -48,7 +48,7 @@ public struct Current: Codable {
     public let weather: [Weather]
     public let rain: Rain?
     public let snow: Snow?
-
+ 
     enum CodingKeys: String, CodingKey {
         case dt, sunrise, sunset, temp, pressure, humidity, uvi, clouds, visibility, weather, rain, snow
         case feelsLike = "feels_like"
