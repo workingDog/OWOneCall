@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 
 /*
@@ -64,58 +63,48 @@ public class OWClient {
      * The server response is parsed then converted to an object, typically OWResponse.
      *
      * @param parameters
-     * @return a AnyPublisher<T?, APIError>
+     * @return a T
      */
-    public func fetchThis<T: Decodable>(param: String, options: OWOptionsProtocol) -> AnyPublisher<T?, APIError> {
+    public func fetchThisAsync<T: Decodable>(param: String, options: OWOptionsProtocol) async throws -> T {
+
         guard let url = baseUrl(param, options: options) else {
-            return Just<T?>(nil).setFailureType(to: APIError.self).eraseToAnyPublisher()
+            throw APIError.apiError(reason: "bad URL")
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(mediaType, forHTTPHeaderField: "Accept")
         request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
-        
-        return self.doDataTaskPublish(request: request)
-    }
-    
-    private func doDataTaskPublish<T: Decodable>(request: URLRequest) -> AnyPublisher<T?, APIError> {
-        return self.sessionManager.dataTaskPublisher(for: request)
-            .tryMap { data, response in
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    throw APIError.unknown
-                }
-                if (httpResponse.statusCode == 401) {
-                    throw APIError.apiError(reason: "Unauthorized")
-                }
-                if (httpResponse.statusCode == 403) {
-                    throw APIError.apiError(reason: "Resource forbidden")
-                }
-                if (httpResponse.statusCode == 404) {
-                    throw APIError.apiError(reason: "Resource not found")
-                }
-                if (405..<500 ~= httpResponse.statusCode) {
-                    throw APIError.apiError(reason: "client error")
-                }
-                if (500..<600 ~= httpResponse.statusCode) {
-                    throw APIError.apiError(reason: "server error")
-                }
 
-                return try? JSONDecoder().decode(T.self, from: data)
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw APIError.unknown
             }
-            .mapError { error in
-                // return the APIError type error
-                if let error = error as? APIError {
-                    return error
-                }
-                // a URLError, convert it to APIError type error
-                if let urlerror = error as? URLError {
-                    return APIError.networkError(from: urlerror)
-                }
-                // unknown error condition
-                return APIError.unknown
+            if (httpResponse.statusCode == 401) {
+                throw APIError.apiError(reason: "Unauthorized")
             }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+            if (httpResponse.statusCode == 403) {
+                throw APIError.apiError(reason: "Resource forbidden")
+            }
+            if (httpResponse.statusCode == 404) {
+                throw APIError.apiError(reason: "Resource not found")
+            }
+            if (405..<500 ~= httpResponse.statusCode) {
+                throw APIError.apiError(reason: "client error")
+            }
+            if (500..<600 ~= httpResponse.statusCode) {
+                throw APIError.apiError(reason: "server error")
+            }
+            if (httpResponse.statusCode != 200) {
+                throw APIError.networkError(from: URLError(.badServerResponse))
+            }
+            let results = try JSONDecoder().decode(T.self, from: data)
+            return results
+        }
+        catch {
+            throw APIError.parserError(reason: "json error")
+        }
     }
  
 }

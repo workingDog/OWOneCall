@@ -20,12 +20,11 @@ Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-
     ...
     Text(weather.current?.weatherInfo() ?? "")
     
-    // or using the callback style
-    weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.current()) { response in
-            if let theWeather = response {
-               self.weather = theWeather
-            }
+    // or using the async style
+    if let results = await weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.dailyForecast(lang: lang)) {
+            weather = results
     }
+
 
 See the following for example uses:
 
