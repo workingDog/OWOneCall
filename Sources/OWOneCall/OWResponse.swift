@@ -6,7 +6,6 @@
 //
 import Foundation
 
-
 // MARK: - OWResponse
 public struct OWResponse: Codable {
     
@@ -17,9 +16,10 @@ public struct OWResponse: Codable {
     public let minutely: [Minutely]?
     public let hourly: [Hourly]?
     public let daily: [Daily]?
+    public let alerts: [OWAlert]?
     
     enum CodingKeys: String, CodingKey {
-        case lat, lon, timezone, current, minutely, hourly, daily
+        case lat, lon, timezone, current, minutely, hourly, daily, alerts
         case timezoneOffset = "timezone_offset"
     }
     
@@ -32,6 +32,7 @@ public struct OWResponse: Codable {
         self.minutely = []
         self.hourly = []
         self.daily = []
+        self.alerts = []
     }
     
     public func weatherInfo() -> String {
@@ -353,4 +354,31 @@ public struct Minutely: Codable {
     public func getDate() -> Date {
         return Date(timeIntervalSince1970: TimeInterval(self.dt))
     }
+}
+
+// MARK: - OWAlert
+public struct OWAlert: Codable {
+    
+    public let senderName: String
+    public let event: String
+    public let start: Int
+    public let end: Int
+    public let description: String
+    public let tags: [String]?
+    
+    enum CodingKeys: String, CodingKey {
+        case event, description, start, end, tags
+        case senderName = "sender_name"
+    }
+    
+    // convenience function
+    public func getStartDate() -> Date {
+        return Date(timeIntervalSince1970: TimeInterval(self.start))
+    }
+    
+    // convenience function
+    public func getEndDate() -> Date {
+        return Date(timeIntervalSince1970: TimeInterval(self.end))
+    }
+
 }

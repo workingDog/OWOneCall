@@ -7,6 +7,7 @@ let package = Package(
     name: "OWOneCall",
     platforms: [
         .iOS(.v15),
+        .macCatalyst(.v15),
         .macOS(.v12),
     ],
     products: [
