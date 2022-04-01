@@ -8,6 +8,9 @@
 
 Provides for current, forecast and historical weather data through a single function call.
 
+**Note**, currently the `master` branch uses `Combine` framework for the API requests. There is 
+also the `async` branch, with uses the newer Swift concurrency `async/await` for the API requests.
+
 
 ### Usage
 
