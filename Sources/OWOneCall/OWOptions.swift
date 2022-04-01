@@ -16,6 +16,7 @@ public enum ExcludeMode: String {
     case minutely
     case hourly
     case daily
+    case alerts
 }
 
 /*
@@ -87,9 +88,13 @@ public class OWOptions: OWOptionsProtocol {
     // for everything
     public init() { }
     
+    // for everything
+    public init(lang: String = "en") { }
+    
+    // just the current weather
     public static func current(lang: String = "en") -> OWOptions {
         let options = OWOptions()
-        options.excludeMode = [.daily, .hourly, .minutely]
+        options.excludeMode = [.daily, .hourly, .minutely, .alerts]
         options.units = .metric
         options.lang = lang
         return options
@@ -98,7 +103,7 @@ public class OWOptions: OWOptionsProtocol {
     // daily and current weather
     public static func dailyForecast(lang: String = "en") -> OWOptions {
         let options = OWOptions()
-        options.excludeMode = [.hourly, .minutely]
+        options.excludeMode = [.hourly, .minutely, .alerts]
         options.units = .metric
         options.lang = lang
         return options
@@ -107,7 +112,16 @@ public class OWOptions: OWOptionsProtocol {
     // hourly and current weather
     public static func hourlyForecast(lang: String = "en") -> OWOptions {
         let options = OWOptions()
-        options.excludeMode = [.daily, .minutely]
+        options.excludeMode = [.daily, .minutely, .alerts]
+        options.units = .metric
+        options.lang = lang
+        return options
+    }
+    
+    // just the alerts
+    public static func alerts(lang: String = "en") -> OWOptions {
+        let options = OWOptions()
+        options.excludeMode = [.daily, .hourly, .minutely, .current]
         options.units = .metric
         options.lang = lang
         return options
