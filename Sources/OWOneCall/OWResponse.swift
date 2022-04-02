@@ -161,7 +161,7 @@ public struct Snow: Codable {
 }
 
 // MARK: - Weather
-public struct Weather: Codable {
+public struct Weather: Identifiable, Codable {
     public let id: Int
     public let main, weatherDescription, icon: String
     
@@ -357,7 +357,8 @@ public struct Minutely: Codable {
 }
 
 // MARK: - OWAlert
-public struct OWAlert: Codable {
+public struct OWAlert: Identifiable, Codable {
+    public let id = UUID() 
     
     public let senderName: String
     public let event: String
