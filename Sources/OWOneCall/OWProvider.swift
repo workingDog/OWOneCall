@@ -38,7 +38,7 @@ open class OWProvider {
         }
     }
     
-    /// convenience method, get the weather at the given location with the given options, with callback
+    /// get the weather at the given location with the given options, with completion handler
     open func getWeather(lat: Double, lon: Double, options: OWOptionsProtocol, completion: @escaping (OWResponse?) -> Void) {
         Task {
             let results: OWResponse? = await getWeather(lat: lat, lon: lon, options: options)

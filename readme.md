@@ -8,9 +8,6 @@
 
 Provides for current, forecast and historical weather data through a single function call.
 
-**Note**, this `async` branch, uses the Swift concurrency `async/await` for the API requests.
- The `master` branch uses the `Combine` framework for the API requests. 
-
 
 ### Usage
 
@@ -19,6 +16,8 @@ Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-
     let weatherProvider = OWProvider(apiKey: "your key")
     @State var weather = OWResponse()
     ...
+    
+    // using a binding
     weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
     ...
     Text(weather.current?.weatherInfo() ?? "")
