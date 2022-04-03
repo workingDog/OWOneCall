@@ -8,10 +8,6 @@
 
 Provides for current, forecast and historical weather data through a single function call.
 
-**Note**, currently the `master` branch uses the `Combine` framework for the API requests. There is 
-also the `async` branch, with uses the newer Swift concurrency `async/await` for the API requests.
-
-
 ### Usage
 
 Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) is accessed through the use of a **OWProvider**, with a single function **getWeather**, eg:
@@ -19,15 +15,22 @@ Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-
     let weatherProvider = OWProvider(apiKey: "your key")
     @State var weather = OWResponse()
     ...
+    
+    // using a binding
     weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
     ...
     Text(weather.current?.weatherInfo() ?? "")
     
-    // or using the callback style
+    // or using the async style, eg with `.task {...}`
+    if let results = await weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.dailyForecast(lang: lang)) {
+            weather = results
+    }
+    
+    // or using the callback style, eg with `.onAppear {...}`
     weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.current()) { response in
-            if let theWeather = response {
-               self.weather = theWeather
-            }
+           if let theWeather = response {
+              self.weather = theWeather
+           }
     }
 
 See the following for example uses:
@@ -70,7 +73,7 @@ Include the files in the **./Sources/OWOneCall** folder into your project or pre
 Create a Package.swift file for your project and add a dependency to:
 
     dependencies: [
-      .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.2.1")
+      .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.3.0")
     ]
 
 #### Using Xcode

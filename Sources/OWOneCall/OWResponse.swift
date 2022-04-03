@@ -200,7 +200,8 @@ public struct Weather: Identifiable, Codable {
 }
 
 // MARK: - Daily
-public struct Daily: Codable, Hashable  {
+public struct Daily: Identifiable, Codable, Hashable  {
+    public let id = UUID()
     
     public let dt, sunrise, sunset, pressure, humidity, windDeg, clouds: Int
     public let dewPoint, windSpeed: Double
@@ -289,7 +290,8 @@ public struct DailyTemp: Codable {
 }
 
 // MARK: - Hourly
-public struct Hourly: Codable {
+public struct Hourly: Identifiable, Codable {
+    public let id = UUID()
     
     public let dt, pressure, humidity, clouds, windDeg: Int
     public let temp, feelsLike, dewPoint, windSpeed: Double
@@ -340,7 +342,8 @@ public struct Hourly: Codable {
 }
 
 // MARK: - Minutely
-public struct Minutely: Codable {
+public struct Minutely: Identifiable, Codable {
+    public let id = UUID()
     
     public let dt: Int
     public let precipitation: Double
