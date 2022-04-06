@@ -35,6 +35,8 @@ public struct OWResponse: Codable {
         self.alerts = []
     }
     
+    // convenience function
+    // return some weather info from the current weather primary (ie first weather)
     public func weatherInfo() -> String {
         return current != nil ? current!.weatherInfo() : ""
     }
@@ -81,20 +83,27 @@ public struct Current: Codable {
     
     // convenience function
     public func getDate() -> Date {
-        return Date(timeIntervalSince1970: TimeInterval(self.dt))
+        return Date(timeIntervalSince1970: TimeInterval(dt))
     }
     
     // convenience function
-    public func weatherInfo() -> String {
-        let theTemp = String(format: "%.1f", self.temp)
-        return (self.weather.first != nil)
-            ? "\(self.weather.first!.weatherDescription.capitalized) \(theTemp)°"
-            : ""
+    // return some weather info from the chosen index of the weather array or an empty string
+    public func weatherInfo(at index: Int = 0) -> String {
+        let theTemp = String(format: "%.1f", temp)
+        return (index < weather.count) ? "\(weather[index].weatherDescription.capitalized) \(theTemp)°" : ""
     }
 
     // convenience function
-    public func weatherIconName() -> String {
-        return self.weather.first != nil ? self.weather.first!.iconNameFromId : "smiley"
+    // return the SFSymbol icon name from the chosen index of the weather array or an empty string
+    public func weatherIconName(at index: Int = 0) -> String {
+        return (index < weather.count) ? weather[index].iconNameFromId : ""
+    }
+    
+    // convenience function
+    // return the SFSymbol name equivalent to the icon name
+    // from the chosen index of the weather array or an empty string
+    public func weatherSymbolName(at index: Int = 0) -> String {
+        return (index < weather.count) ? weather[index].iconSymbolName : ""
     }
     
 }
@@ -165,6 +174,8 @@ public struct Weather: Identifiable, Codable {
     public let id: Int
     public let main, weatherDescription, icon: String
     
+    public static var defaultIcon = "questionmark"
+    
     enum CodingKeys: String, CodingKey {
         case id, main, icon
         case weatherDescription = "description"
@@ -177,26 +188,41 @@ public struct Weather: Identifiable, Codable {
         self.icon = ""
     }
     
+    // return the equivalent SFSymbol name from the weather condition `id` number
+    // see: https://openweathermap.org/weather-conditions#How-to-get-icon-URL
     public var iconNameFromId: String {
         switch id {
-        case 200...232:  // thunderstorm
-            return "cloud.bolt.rain"
-        case 300...301: // drizzle
-            return "cloud.drizzle"
-        case 500...531: // rain
-            return "cloud.rain"
-        case 600...622: // snow
-            return "cloud.snow"
-        case 701...781: // fog, haze, dust
-            return "cloud.fog"
-        case 800:       //  clear sky
-            return "sun.max"
-        case 801...804:
-            return "cloud.sun"
-        default:
-            return "cloud.sun"
+            case 200...232: return "cloud.bolt.rain"
+            case 300...301: return "cloud.rain"
+            case 500...504: return "cloud.heavyrain"
+            case 511: return "cloud.snow"
+            case 520...531: return "cloud.rain"
+            case 600...622: return "cloud.snow"
+            case 701...781: return "cloud.fog"
+            case 800: return "sun.max"
+            case 801: return "cloud.sun"
+            case 802...804: return "cloud"
+        default: return Weather.defaultIcon
         }
     }
+    
+    // return the equivalent SFSymbol name from the `icon` name
+    // see: https://openweathermap.org/weather-conditions#How-to-get-icon-URL
+    public var iconSymbolName: String {
+        switch icon {
+            case "01d","01n": return "sun.max"
+            case "02d","02n": return "cloud.sun"
+            case "03d","03n": return "cloud"
+            case "04d","04n": return "cloud"
+            case "09d","09n": return "cloud.rain"
+            case "10d","10n": return "cloud.heavyrain"
+            case "11d","11n": return "cloud.bolt.rain"
+            case "13d","13n": return "cloud.snow"
+            case "50d","50n": return "cloud.fog"
+        default: return Weather.defaultIcon
+        }
+    }
+    
 }
 
 // MARK: - Daily
@@ -244,12 +270,20 @@ public struct Daily: Identifiable, Codable, Hashable  {
     
     // convenience function
     public func getDate() -> Date {
-        return Date(timeIntervalSince1970: TimeInterval(self.dt))
+        return Date(timeIntervalSince1970: TimeInterval(dt))
     }
     
     // convenience function
-    public func weatherIconName() -> String {
-        return self.weather.first != nil ? self.weather.first!.iconNameFromId : "smiley"
+    // return the SFSymbol name from the chosen index of the weather array or an empty string
+    public func weatherIconName(at index: Int = 0) -> String {
+        return (index < weather.count) ? weather[index].iconNameFromId : ""
+    }
+    
+    // convenience function
+    // return the SFSymbol name equivalent to the icon name
+    // from the chosen index of the weather array or an empty string
+    public func weatherSymbolName(at index: Int = 0) -> String {
+        return (index < weather.count) ? weather[index].iconSymbolName : ""
     }
     
     public static func == (lhs: Daily, rhs: Daily) -> Bool {
@@ -331,12 +365,20 @@ public struct Hourly: Identifiable, Codable {
     
     // convenience function
     public func getDate() -> Date {
-        return Date(timeIntervalSince1970: TimeInterval(self.dt))
+        return Date(timeIntervalSince1970: TimeInterval(dt))
     }
     
     // convenience function
-    public func weatherIconName() -> String {
-        return self.weather.first != nil ? self.weather.first!.iconNameFromId : "smiley"
+    // return the SFSymbol name from the chosen index of the weather array or an empty string
+    public func weatherIconName(at index: Int = 0) -> String {
+        return (index < weather.count) ? weather[index].iconNameFromId : ""
+    }
+    
+    // convenience function
+    // return the SFSymbol name equivalent to the icon name
+    // from the chosen index of the weather array or an empty string
+    public func weatherSymbolName(at index: Int = 0) -> String {
+        return (index < weather.count) ? weather[index].iconSymbolName : ""
     }
     
 }
@@ -348,6 +390,10 @@ public struct Minutely: Identifiable, Codable {
     public let dt: Int
     public let precipitation: Double
     
+    enum CodingKeys: String, CodingKey {
+        case dt, precipitation
+    }
+    
     public init() {
         self.dt = 0
         self.precipitation = 0.0
@@ -355,7 +401,7 @@ public struct Minutely: Identifiable, Codable {
     
     // convenience function
     public func getDate() -> Date {
-        return Date(timeIntervalSince1970: TimeInterval(self.dt))
+        return Date(timeIntervalSince1970: TimeInterval(dt))
     }
 }
 
@@ -377,12 +423,12 @@ public struct OWAlert: Identifiable, Codable {
     
     // convenience function
     public func getStartDate() -> Date {
-        return Date(timeIntervalSince1970: TimeInterval(self.start))
+        return Date(timeIntervalSince1970: TimeInterval(start))
     }
     
     // convenience function
     public func getEndDate() -> Date {
-        return Date(timeIntervalSince1970: TimeInterval(self.end))
+        return Date(timeIntervalSince1970: TimeInterval(end))
     }
 
 }
