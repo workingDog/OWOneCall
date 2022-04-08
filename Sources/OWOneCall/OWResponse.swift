@@ -6,6 +6,7 @@
 //
 import Foundation
 
+
 // MARK: - OWResponse
 public struct OWResponse: Codable {
     
@@ -18,25 +19,28 @@ public struct OWResponse: Codable {
     public let daily: [Daily]?
     public let alerts: [OWAlert]?
     
+    public init(lat: Double = 0.0, lon: Double = 0.0,
+                timezone: String = "GMT", timezoneOffset: Int = 0, current: Current? = nil,
+                minutely: [Minutely]? = [], hourly: [Hourly]? = [], daily: [Daily]? = [],
+                alerts: [OWAlert]? = []) {
+        
+        self.lat = lat
+        self.lon = lon
+        self.timezone = timezone
+        self.timezoneOffset = timezoneOffset
+        self.current = current
+        self.minutely = minutely
+        self.hourly = hourly
+        self.daily = daily
+        self.alerts = alerts
+    }
+    
     enum CodingKeys: String, CodingKey {
         case lat, lon, timezone, current, minutely, hourly, daily, alerts
         case timezoneOffset = "timezone_offset"
     }
-    
-    public init() {
-        self.lat = 0.0
-        self.lon = 0.0
-        self.timezone = ""
-        self.timezoneOffset = 0
-        self.current = Current()
-        self.minutely = []
-        self.hourly = []
-        self.daily = []
-        self.alerts = []
-    }
-    
-    // convenience function
-    // return some weather info from the current weather primary (ie first weather)
+
+    /// return some weather info from the current weather primary (ie first weather)
     public func weatherInfo() -> String {
         return current != nil ? current!.weatherInfo() : ""
     }
@@ -61,51 +65,27 @@ public struct Current: Codable {
         case windGust = "wind_gust"
     }
     
-    public init() {
-        self.dt = 0
-        self.sunrise = 0
-        self.sunset = 0
-        self.temp = 0.0
-        self.feelsLike = 0.0
-        self.pressure = 0
-        self.humidity = 0
-        self.dewPoint = 0.0
-        self.uvi = 0.0
-        self.clouds = 0
-        self.visibility = 0
-        self.windSpeed = 0.0
-        self.windDeg = 0
-        self.weather = []
-        self.rain = Rain()
-        self.snow = Snow()
-        self.windGust = 0.0
-    }
-    
-    // convenience function
+    /// return `dt` as a Date
     public func getDate() -> Date {
         return Date(timeIntervalSince1970: TimeInterval(dt))
     }
     
-    // convenience function
-    // return some weather info from the chosen index of the weather array or an empty string
+    /// return some weather info from the chosen index of the weather array or an empty string
     public func weatherInfo(at index: Int = 0) -> String {
         let theTemp = String(format: "%.1f", temp)
         return (index < weather.count) ? "\(weather[index].weatherDescription.capitalized) \(theTemp)°" : ""
     }
 
-    // convenience function
-    // return the SFSymbol icon name from the chosen index of the weather array or an empty string
+    /// return the SFSymbol icon name from the chosen index of the weather array or an empty string
     public func weatherIconName(at index: Int = 0) -> String {
         return (index < weather.count) ? weather[index].iconNameFromId : ""
     }
     
-    // convenience function
-    // return the SFSymbol name equivalent to the icon name
-    // from the chosen index of the weather array or an empty string
+    /// return the SFSymbol name equivalent to the icon name at the chosen index of the weather array or an empty string
     public func weatherSymbolName(at index: Int = 0) -> String {
         return (index < weather.count) ? weather[index].iconSymbolName : ""
     }
-    
+
 }
 
 public struct Rain: Codable {
@@ -117,11 +97,6 @@ public struct Rain: Codable {
         case the3H = "3h"
     }
     
-    public init() {
-        self.the1H = 0.0
-        self.the3H = 0.0
-    }
-
     // for the case where we have:  "rain": { }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -136,7 +111,7 @@ public struct Rain: Codable {
             self.the3H = nil
         }
     }
-    
+     
 }
 
 public struct Snow: Codable {
@@ -148,11 +123,6 @@ public struct Snow: Codable {
         case the3H = "3h"
     }
 
-    public init() {
-        self.the1H = 0.0
-        self.the3H = 0.0
-    }
-    
     // for the case where we have:  "snow": { }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -167,6 +137,7 @@ public struct Snow: Codable {
             self.the3H = nil
         }
     }
+
 }
 
 // MARK: - Weather
@@ -174,6 +145,7 @@ public struct Weather: Identifiable, Codable {
     public let id: Int
     public let main, weatherDescription, icon: String
     
+    /// the SFSymbol name to use as the default icon name
     public static var defaultIcon = "questionmark"
     
     enum CodingKeys: String, CodingKey {
@@ -181,15 +153,7 @@ public struct Weather: Identifiable, Codable {
         case weatherDescription = "description"
     }
     
-    public init() {
-        self.id = 0
-        self.main = ""
-        self.weatherDescription = ""
-        self.icon = ""
-    }
-    
-    // return the equivalent SFSymbol name from the weather condition `id` number
-    // see: https://openweathermap.org/weather-conditions#How-to-get-icon-URL
+    /// return the equivalent SFSymbol name from the weather condition `id` number
     public var iconNameFromId: String {
         switch id {
             case 200...232: return "cloud.bolt.rain"
@@ -206,8 +170,7 @@ public struct Weather: Identifiable, Codable {
         }
     }
     
-    // return the equivalent SFSymbol name from the `icon` name
-    // see: https://openweathermap.org/weather-conditions#How-to-get-icon-URL
+    /// return the equivalent SFSymbol name from the `icon` name
     public var iconSymbolName: String {
         switch icon {
             case "01d","01n": return "sun.max"
@@ -222,11 +185,11 @@ public struct Weather: Identifiable, Codable {
         default: return Weather.defaultIcon
         }
     }
-    
+
 }
 
 // MARK: - Daily
-public struct Daily: Identifiable, Codable, Hashable  {
+public struct Daily: Identifiable, Codable {
     public let id = UUID()
     
     public let dt, sunrise, sunset, pressure, humidity, windDeg, clouds: Int
@@ -247,80 +210,31 @@ public struct Daily: Identifiable, Codable, Hashable  {
         case windGust = "wind_gust"
     }
     
-    public init() {
-        self.dt = 0
-        self.sunrise = 0
-        self.sunset = 0
-        self.temp = DailyTemp()
-        self.feelsLike = FeelsLike()
-        self.pressure = 0
-        self.humidity = 0
-        self.dewPoint = 0.0
-        self.uvi = 0.0
-        self.clouds = 0
-        self.windSpeed = 0.0
-        self.windDeg = 0
-        self.windGust = 0.0
-        self.weather = []
-        self.rain = 0.0
-        self.snow = 0.0
-        self.visibility = 0
-        self.pop = 0.0
-    }
-    
-    // convenience function
+    /// return `dt` as a Date
     public func getDate() -> Date {
         return Date(timeIntervalSince1970: TimeInterval(dt))
     }
     
-    // convenience function
-    // return the SFSymbol name from the chosen index of the weather array or an empty string
+    /// return the SFSymbol name from the chosen index of the weather array or an empty string
     public func weatherIconName(at index: Int = 0) -> String {
         return (index < weather.count) ? weather[index].iconNameFromId : ""
     }
     
-    // convenience function
-    // return the SFSymbol name equivalent to the icon name
-    // from the chosen index of the weather array or an empty string
+    /// return the SFSymbol name equivalent to the icon name from the chosen index of the weather array or an empty string
     public func weatherSymbolName(at index: Int = 0) -> String {
         return (index < weather.count) ? weather[index].iconSymbolName : ""
     }
-    
-    public static func == (lhs: Daily, rhs: Daily) -> Bool {
-        lhs.dt == rhs.dt
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(dt)
-    }
+ 
 }
 
 // MARK: - FeelsLike
 public struct FeelsLike: Codable {
-    
     public let day, night, eve, morn: Double
-    
-    public init() {
-        self.day = 0.0
-        self.night = 0.0
-        self.eve = 0.0
-        self.morn = 0.0
-    }
 }
 
 // MARK: - DailyTemp
 public struct DailyTemp: Codable {
-    
     public let day, min, max, night, eve, morn: Double
-    
-    public init() {
-        self.day = 0.0
-        self.min = 0.0
-        self.max = 0.0
-        self.night = 0.0
-        self.eve = 0.0
-        self.morn = 0.0
-    }
 }
 
 // MARK: - Hourly
@@ -345,38 +259,17 @@ public struct Hourly: Identifiable, Codable {
         case windGust = "wind_gust"
     }
     
-    public init() {
-        self.dt = 0
-        self.temp = 0.0
-        self.feelsLike = 0.0
-        self.pressure = 0
-        self.humidity = 0
-        self.dewPoint = 0.0
-        self.clouds = 0
-        self.windSpeed = 0.0
-        self.windDeg = 0
-        self.windGust = 0.0
-        self.weather = []
-        self.rain = Rain()
-        self.snow = Snow()
-        self.pop = 0.0
-        self.visibility = 0
-    }
-    
-    // convenience function
+    /// return `dt` as a Date
     public func getDate() -> Date {
         return Date(timeIntervalSince1970: TimeInterval(dt))
     }
     
-    // convenience function
-    // return the SFSymbol name from the chosen index of the weather array or an empty string
+    /// return the SFSymbol name from the chosen index of the weather array or an empty string
     public func weatherIconName(at index: Int = 0) -> String {
         return (index < weather.count) ? weather[index].iconNameFromId : ""
     }
     
-    // convenience function
-    // return the SFSymbol name equivalent to the icon name
-    // from the chosen index of the weather array or an empty string
+    /// return the SFSymbol name equivalent to the icon name from the chosen index of the weather array or an empty string
     public func weatherSymbolName(at index: Int = 0) -> String {
         return (index < weather.count) ? weather[index].iconSymbolName : ""
     }
@@ -393,13 +286,8 @@ public struct Minutely: Identifiable, Codable {
     enum CodingKeys: String, CodingKey {
         case dt, precipitation
     }
-    
-    public init() {
-        self.dt = 0
-        self.precipitation = 0.0
-    }
-    
-    // convenience function
+
+    /// return `dt` as a Date
     public func getDate() -> Date {
         return Date(timeIntervalSince1970: TimeInterval(dt))
     }
@@ -421,12 +309,12 @@ public struct OWAlert: Identifiable, Codable {
         case senderName = "sender_name"
     }
     
-    // convenience function
+    /// return `start` as a Date
     public func getStartDate() -> Date {
         return Date(timeIntervalSince1970: TimeInterval(start))
     }
     
-    // convenience function
+    /// return `end` as a Date
     public func getEndDate() -> Date {
         return Date(timeIntervalSince1970: TimeInterval(end))
     }
