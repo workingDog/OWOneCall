@@ -8,7 +8,8 @@ import Foundation
 
 
 // MARK: - OWResponse
-public struct OWResponse: Codable {
+public struct OWResponse: Identifiable, Codable {
+    public let id = UUID()
     
     public let lat, lon: Double
     public let timezone: String
