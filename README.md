@@ -12,26 +12,28 @@ Provides for current, forecast and historical weather data through a single func
 
 Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) is accessed through the use of a **OWProvider**, with a single function **getWeather**, eg:
 
-    let weatherProvider = OWProvider(apiKey: "your key")
-    @State var weather = OWResponse()
-    ...
-    
-    // using a binding
-    weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
-    ...
-    Text(weather.current?.weatherInfo() ?? "")
-    
-    // or using the async style, eg with `.task {...}`
-    if let results = await weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.dailyForecast(lang: lang)) {
-            weather = results
-    }
-    
-    // or using the callback style, eg with `.onAppear {...}`
-    weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.current()) { response in
-           if let theWeather = response {
-              self.weather = theWeather
-           }
-    }
+```swift
+let weatherProvider = OWProvider(apiKey: "your key")
+@State var weather = OWResponse()
+...
+
+// using a binding
+weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
+...
+Text(weather.current?.weatherInfo() ?? "")
+
+// or using the async style, eg with `.task {...}`
+if let results = await weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.dailyForecast(lang: lang)) {
+        weather = results
+}
+
+// or using the callback style, eg with `.onAppear {...}`
+weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.current()) { response in
+       if let theWeather = response {
+          self.weather = theWeather
+       }
+}
+```
 
 See the following for example uses:
 
@@ -48,7 +50,9 @@ Options available:
 
 Create an options object such as this, to retrieve the current weather data:
 
-    let myOptions = OWOptions(excludeMode: [.daily, .hourly, .minutely], units: .metric, lang: "en")
+```swift
+let myOptions = OWOptions(excludeMode: [.daily, .hourly, .minutely], units: .metric, lang: "en")
+```
 
 Additional convenience options to retrieve current and forecast weather data: 
 
@@ -72,9 +76,11 @@ Include the files in the **./Sources/OWOneCall** folder into your project or pre
 
 Create a Package.swift file for your project and add a dependency to:
 
-    dependencies: [
-      .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.3.1")
-    ]
+```swift
+dependencies: [
+  .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.3.1")
+]
+```
 
 #### Using Xcode
 
@@ -83,8 +89,9 @@ Create a Package.swift file for your project and add a dependency to:
 
 Then in your code:
 
-    import OWOneCall
-    
+```swift
+import OWOneCall
+```
 
 ### References
 
