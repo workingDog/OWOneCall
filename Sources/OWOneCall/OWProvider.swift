@@ -13,7 +13,7 @@ import SwiftUI
  */
 open class OWProvider {
     
-    private let client: OWClient
+    public let client: OWClient
     
     public init(apiKey: String) {
         self.client = OWClient(apiKey: apiKey)
