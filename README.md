@@ -79,7 +79,7 @@ Create a Package.swift file for your project and add a dependency to:
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.3.1")
+  .package(url: "https://github.com/workingDog/OWOneCall.git", from: "1.3.2")
 ]
 ```
 
