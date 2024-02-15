@@ -21,8 +21,8 @@ open class OWProvider {
     
     /// get the weather at the given location with the given options, results pass back through the weather binding
     open func getWeather(lat: Double, lon: Double, weather: Binding<OWResponse>, options: OWOptionsProtocol) {
-        Task {
-            if let results: OWResponse = await getWeather(lat: lat, lon: lon, options: options) {
+        getWeather(lat: lat, lon: lon, options: options) { results in
+            if let results {
                 weather.wrappedValue = results
             }
         }
