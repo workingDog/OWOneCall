@@ -15,8 +15,9 @@ open class OWProvider {
     
     public let client: OWClient
     
-    public init(apiKey: String) {
-        self.client = OWClient(apiKey: apiKey)
+    /// default endpoint, One Call API 3.0
+    public init(apiKey: String, urlString: String = "https://api.openweathermap.org/data/3.0/onecall") {
+        self.client = OWClient(apiKey: apiKey, urlString: urlString)
     }
     
     /// get the weather at the given location with the given options, results pass back through the weather binding

@@ -37,13 +37,12 @@ public class OWClient {
     let sessionManager: URLSession
     
     let mediaType = "application/json; charset=utf-8"
-    var oneCallURL = "https://api.openweathermap.org/data/2.5/onecall"
+    var oneCallURL = "https://api.openweathermap.org/data/3.0/onecall"
     let timemachine = "/timemachine"
     
-    public init(apiKey: String, urlString: String = "https://api.openweathermap.org/data/2.5/onecall") {
-        self.apiKey = "appid=" + apiKey
+    public init(apiKey: String, urlString: String) {
         self.oneCallURL = urlString
-        
+        self.apiKey = "appid=" + apiKey
         self.sessionManager = {
             let configuration = URLSessionConfiguration.default
             configuration.timeoutIntervalForRequest = 30  // seconds
