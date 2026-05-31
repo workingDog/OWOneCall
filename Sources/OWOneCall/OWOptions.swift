@@ -8,6 +8,16 @@
 import Foundation
 
 
+/// convenience
+extension Array where Element == URLQueryItem {
+    
+    mutating func append<T>(name: String, value: T?) {
+        guard let value else { return }
+        append(URLQueryItem(name: name, value: String(describing: value)))
+    }
+    
+}
+
 /*
  * parameters to exclude some parts of the weather data from the API response
  */
@@ -29,7 +39,7 @@ public enum Units: String {
 }
 
 public protocol OWOptionsProtocol {
-    func toParamString() -> String
+    func toQueryItems() -> [URLQueryItem]
 }
 
 /*
@@ -59,13 +69,13 @@ public class OWHistOptions: OWOptionsProtocol {
         return OWHistOptions.daysAgo(day: 1.0, lang: lang)
     }
     
-    public func toParamString() -> String {
-        var stringer = ""
-        stringer += "&dt=" + String(dt)
-        if let wlang = lang {
-            stringer += "&lang=" + wlang
-        }
-        return stringer
+    public func toQueryItems() -> [URLQueryItem] {
+        var items: [URLQueryItem] = []
+
+        items.append(name: "dt", value: dt)
+        items.append(name: "lang", value: lang)
+
+        return items
     }
 }
 
@@ -126,18 +136,17 @@ public class OWOptions: OWOptionsProtocol {
         options.lang = lang
         return options
     }
-    
-    public func toParamString() -> String {
-        var stringer = ""
-        if let wunits = units {
-            stringer += "&units=" + wunits.rawValue
+
+    public func toQueryItems() -> [URLQueryItem] {
+        var items: [URLQueryItem] = []
+
+        items.append(name: "units", value: units)
+        items.append(name: "lang", value: lang)
+        
+        if let excludeMode {
+            items.append(name: "exclude", value: excludeMode.map { String($0.rawValue) }.joined(separator: ","))
         }
-        if let wmode = excludeMode, !wmode.isEmpty {
-            stringer += "&exclude=" + wmode.map{$0.rawValue}.joined(separator: ",")
-        }
-        if let wlang = lang {
-            stringer += "&lang=" + wlang
-        }
-        return stringer
+
+        return items
     }
 }

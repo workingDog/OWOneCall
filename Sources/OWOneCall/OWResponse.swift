@@ -20,10 +20,17 @@ public struct OWResponse: Identifiable, Codable {
     public let daily: [Daily]?
     public let alerts: [OWAlert]?
     
+    public let data: [Current]?  // <-- for history, timemachine
+    
     public init(lat: Double = 0.0, lon: Double = 0.0,
-                timezone: String = "GMT", timezoneOffset: Int = 0, current: Current? = nil,
-                minutely: [Minutely]? = [], hourly: [Hourly]? = [], daily: [Daily]? = [],
-                alerts: [OWAlert]? = []) {
+                timezone: String = "GMT",
+                timezoneOffset: Int = 0,
+                current: Current? = nil,
+                minutely: [Minutely]? = [],
+                hourly: [Hourly]? = [],
+                daily: [Daily]? = [],
+                alerts: [OWAlert]? = [],
+                data: [Current]? = []) {
         
         self.lat = lat
         self.lon = lon
@@ -34,10 +41,11 @@ public struct OWResponse: Identifiable, Codable {
         self.hourly = hourly
         self.daily = daily
         self.alerts = alerts
+        self.data = data
     }
     
     enum CodingKeys: String, CodingKey {
-        case lat, lon, timezone, current, minutely, hourly, daily, alerts
+        case lat, lon, timezone, current, minutely, hourly, daily, alerts, data
         case timezoneOffset = "timezone_offset"
     }
 
@@ -147,7 +155,7 @@ public struct Weather: Identifiable, Codable {
     public let main, weatherDescription, icon: String
     
     /// the SFSymbol name to use as the default icon name
-    public static var defaultIcon = "questionmark"
+    public static let defaultIcon = "questionmark"
     
     enum CodingKeys: String, CodingKey {
         case id, main, icon

@@ -20,7 +20,7 @@ let weatherProvider = OWProvider(apiKey: "your key")  // default One Call API 3.
 
 Alternatively;
 
-let weatherProvider = OWProvider(apiKey: "your key", urlString: "https://api.openweathermap.org/data/3.0/onecall")  
+let weatherProvider = OWProvider(apiKey: "your key", baseURL: URL = URL(string: "https://api.openweathermap.org/data/3.0/onecall")!) 
 
 
 // using a binding
@@ -33,12 +33,6 @@ if let results = await weatherProvider.getWeather(lat: 35.661991, lon: 139.76273
         weather = results
 }
 
-// or using the callback style, eg with `.onAppear {...}`
-weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, options: OWOptions.current()) { response in
-       if let theWeather = response {
-          self.weather = theWeather
-       }
-}
 ```
 
 See the following for example uses:
