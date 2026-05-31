@@ -1,17 +1,17 @@
 # SwiftUI OpenWeather One Call API library
 
 
-[One Call API 3.0](https://openweathermap.org/api/one-call-3)
+[One Call API 3.0](https://openweathermap.org/api/one-call-3?collection=one_call_api)
 
 "Make just one API call and get all your essential weather data for a specific location with our new OpenWeather One Call API."
 
-**OWOneCall** is a small Swift library to connect to the [One Call API 3.0](https://openweathermap.org/api/one-call-3) and retrieve the chosen weather data. Made easy to use with SwiftUI.
+**OWOneCall** is a small Swift library to connect to the [One Call API 3.0](https://openweathermap.org/api/one-call-3?collection=one_call_api) and retrieve the chosen weather data. Made easy to use with SwiftUI.
 
 Provides for current, forecast and historical weather data through a single function call.
 
 ### Usage
 
-Weather data from [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) is accessed through the use of a **OWProvider**, with a single function **getWeather**, eg:
+Weather data from [OpenWeather One Call API](https://openweathermap.org/api) is accessed through the use of a **OWProvider**, with a single function **getWeather**, eg:
 
 ```swift
 let weatherProvider = OWProvider(apiKey: "your key")  // default One Call API 3.0
@@ -46,7 +46,7 @@ See the following for example uses:
 
 Options available:
 
--   see [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) for all the options available.
+-   see [OpenWeather One Call API](https://openweathermap.org/api/one-call-3?collection=one_call_api) for all the options available.
 
 Create an options object such as this, to retrieve the current weather data:
 
@@ -95,7 +95,7 @@ import OWOneCall
     
 ### References
 
--    [OpenWeather One Call API](https://openweathermap.org/api/one-call-api)
+-    [OpenWeather One Call API](https://openweathermap.org/api/one-call-3?collection=one_call_api#weather_overview_how)
 
 
 ### Requirement
