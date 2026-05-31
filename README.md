@@ -7,7 +7,7 @@
 
 **OWOneCall** is a small Swift library to connect to the [One Call API 3.0](https://openweathermap.org/api/one-call-3?collection=one_call_api) and retrieve the chosen weather data. Made easy to use with SwiftUI.
 
-Provides for current, forecast and historical weather data through a single function call.
+Provides for **current, forecast and historical** weather data through a single function call.
 
 ### Usage
 
