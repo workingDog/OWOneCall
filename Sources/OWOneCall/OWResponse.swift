@@ -8,7 +8,7 @@ import Foundation
 
 
 // MARK: - OWResponse
-public struct OWResponse: Identifiable, Codable {
+public struct OWResponse: Identifiable, Codable, Sendable {
     public let id = UUID()
     
     public let lat, lon: Double
@@ -56,7 +56,7 @@ public struct OWResponse: Identifiable, Codable {
 }
 
 // MARK: - Current
-public struct Current: Codable {
+public struct Current: Codable, Sendable {
     
     public let dt, sunrise, sunset, pressure, humidity, clouds, visibility, windDeg: Int
     public let temp, feelsLike, dewPoint, uvi, windSpeed: Double
@@ -97,7 +97,7 @@ public struct Current: Codable {
 
 }
 
-public struct Rain: Codable {
+public struct Rain: Codable, Sendable {
     public let the1H: Double?
     public let the3H: Double?
     
@@ -123,7 +123,7 @@ public struct Rain: Codable {
      
 }
 
-public struct Snow: Codable {
+public struct Snow: Codable, Sendable {
     public let the1H: Double?
     public let the3H: Double?
     
@@ -150,7 +150,7 @@ public struct Snow: Codable {
 }
 
 // MARK: - Weather
-public struct Weather: Identifiable, Codable {
+public struct Weather: Identifiable, Codable, Sendable {
     public let id: Int
     public let main, weatherDescription, icon: String
     
@@ -164,41 +164,41 @@ public struct Weather: Identifiable, Codable {
     
     /// return the equivalent SFSymbol name from the weather condition `id` number
     public var iconNameFromId: String {
-        switch id {
-            case 200...232: return "cloud.bolt.rain"
-            case 300...301: return "cloud.rain"
-            case 500...504: return "cloud.heavyrain"
-            case 511: return "cloud.snow"
-            case 520...531: return "cloud.rain"
-            case 600...622: return "cloud.snow"
-            case 701...781: return "cloud.fog"
-            case 800: return "sun.max"
-            case 801: return "cloud.sun"
-            case 802...804: return "cloud"
-        default: return Weather.defaultIcon
+        return switch id {
+            case 200...232: "cloud.bolt.rain"
+            case 300...301: "cloud.rain"
+            case 500...504: "cloud.heavyrain"
+            case 511: "cloud.snow"
+            case 520...531: "cloud.rain"
+            case 600...622: "cloud.snow"
+            case 701...781: "cloud.fog"
+            case 800: "sun.max"
+            case 801: "cloud.sun"
+            case 802...804: "cloud"
+            default: Weather.defaultIcon
         }
     }
     
     /// return the equivalent SFSymbol name from the `icon` name
     public var iconSymbolName: String {
-        switch icon {
-            case "01d","01n": return "sun.max"
-            case "02d","02n": return "cloud.sun"
-            case "03d","03n": return "cloud"
-            case "04d","04n": return "cloud"
-            case "09d","09n": return "cloud.rain"
-            case "10d","10n": return "cloud.heavyrain"
-            case "11d","11n": return "cloud.bolt.rain"
-            case "13d","13n": return "cloud.snow"
-            case "50d","50n": return "cloud.fog"
-        default: return Weather.defaultIcon
+        return switch icon {
+            case "01d","01n": "sun.max"
+            case "02d","02n": "cloud.sun"
+            case "03d","03n": "cloud"
+            case "04d","04n": "cloud"
+            case "09d","09n": "cloud.rain"
+            case "10d","10n": "cloud.heavyrain"
+            case "11d","11n": "cloud.bolt.rain"
+            case "13d","13n": "cloud.snow"
+            case "50d","50n": "cloud.fog"
+            default: Weather.defaultIcon
         }
     }
 
 }
 
 // MARK: - Daily
-public struct Daily: Identifiable, Codable {
+public struct Daily: Identifiable, Codable, Sendable {
     public let id = UUID()
     
     public let dt, sunrise, sunset, pressure, humidity, windDeg, clouds: Int
@@ -237,17 +237,17 @@ public struct Daily: Identifiable, Codable {
 }
 
 // MARK: - FeelsLike
-public struct FeelsLike: Codable {
+public struct FeelsLike: Codable, Sendable {
     public let day, night, eve, morn: Double
 }
 
 // MARK: - DailyTemp
-public struct DailyTemp: Codable {
+public struct DailyTemp: Codable, Sendable {
     public let day, min, max, night, eve, morn: Double
 }
 
 // MARK: - Hourly
-public struct Hourly: Identifiable, Codable {
+public struct Hourly: Identifiable, Codable, Sendable {
     public let id = UUID()
     
     public let dt, pressure, humidity, clouds, windDeg: Int
@@ -286,7 +286,7 @@ public struct Hourly: Identifiable, Codable {
 }
 
 // MARK: - Minutely
-public struct Minutely: Identifiable, Codable {
+public struct Minutely: Identifiable, Codable, Sendable {
     public let id = UUID()
     
     public let dt: Int
@@ -303,7 +303,7 @@ public struct Minutely: Identifiable, Codable {
 }
 
 // MARK: - OWAlert
-public struct OWAlert: Identifiable, Codable {
+public struct OWAlert: Identifiable, Codable, Sendable {
     public let id = UUID()
     
     public let senderName: String
