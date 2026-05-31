@@ -24,7 +24,7 @@ let weatherProvider = OWProvider(apiKey: "your key", baseURL: URL = URL(string: 
 
 
 // using a binding
-weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
+await weatherProvider.getWeather(lat: 35.661991, lon: 139.762735, weather: $weather, options: OWOptions.current())
 ...
 Text(weather.current?.weatherInfo() ?? "")
 
